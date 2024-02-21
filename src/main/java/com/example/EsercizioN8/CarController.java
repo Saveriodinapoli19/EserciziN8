@@ -23,17 +23,17 @@ public class CarController {
       return carRepository.findAll();
   }
   @GetMapping("/car/{id}")
-    public Optional<CarEntity> getCarById(@PathVariable Long id){
-      return carRepository.findById(id);
+    public boolean getCarById(@PathVariable Long id){
+      return carRepository.existsById(id);
   }
   @PutMapping("/update/{id}")
-  public CarEntity updateCarType(@PathVariable Long id, @RequestParam String type) {
+  public boolean updateCarType(@PathVariable Long id, @RequestParam String type) {
     CarEntity carEntity = carRepository.findById(id).orElse(null);
     if(carEntity != null){
       carEntity.setType(type);
-      return carRepository.save(carEntity);
+      return carRepository.existsById(id);
     }
-    return null;
+    return false;
   }
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
