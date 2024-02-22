@@ -43,18 +43,17 @@ public class CarController {
     return new CarEntity() ;
   }
   @DeleteMapping("/delete/{id}")
-  public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
+  public ResponseEntity<String> deleteCar(@PathVariable Long id) {
     if (carRepository.existsById(id)) {
       carRepository.deleteById(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      return new ResponseEntity<>(HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
   }
     @DeleteMapping("allCarDelete")
-    public ResponseEntity<Void> deletecar(){
-      carRepository.deleteAll();
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   public void deleteAll(){
+    carRepository.deleteAll();
     }
 
 }
