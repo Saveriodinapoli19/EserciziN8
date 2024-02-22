@@ -1,5 +1,6 @@
 package com.example.EsercizioN8;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,17 +24,23 @@ public class CarController {
       return carRepository.findAll();
   }
   @GetMapping("/car/{id}")
-    public boolean getCarById(@PathVariable Long id){
-      return carRepository.existsById(id);
+    public CarEntity getCarById(@PathVariable Long id){
+      boolean exist = carRepository.existsById(id);
+   if(exist){
+    return carRepository.findById(id).orElse(null);
+   }
+    return new CarEntity();
   }
   @PutMapping("/update/{id}")
-  public boolean updateCarType(@PathVariable Long id, @RequestParam String type) {
-    CarEntity carEntity = carRepository.findById(id).orElse(null);
-    if(carEntity != null){
+  public CarEntity updateCarType(@PathVariable Long id, @RequestParam String type) {
+    boolean exist = carRepository.existsById(id);
+    if(exist){
+     CarEntity carEntity = carRepository.findById(id).orElse(null);
       carEntity.setType(type);
-      return carRepository.existsById(id);
+      carRepository.save(carEntity);
+    return carEntity;
     }
-    return false;
+    return new CarEntity() ;
   }
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
